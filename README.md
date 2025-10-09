@@ -1,6 +1,6 @@
 # AI Process Automation Dashboard
 
-Smart KPI Monitoring • Automated Insights • Predictive Analytics**
+**Smart KPI Monitoring • Automated Insights • Predictive Analytics**
 
 A Streamlit dashboard to monitor business KPIs, visualize efficiency, and predict delivery times using machine learning.
 
