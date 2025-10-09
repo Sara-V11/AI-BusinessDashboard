@@ -9,7 +9,7 @@ from src.data_cleaning import preprocess_dataset
 from src.kpi_analysis import compute_kpis
 from src.model_training import train_delivery_model
 
-# ---------------- CONFIG ----------------
+#CONFIG 
 st.set_page_config(page_title="AI Process Automation Dashboard", layout="wide", page_icon="🤖")
 st.markdown("""
     <style>
@@ -22,11 +22,11 @@ st.markdown("""
 st.title("🤖 AI-Based Process Automation Dashboard")
 st.caption("Smart KPI Monitoring • Automated Insights • Predictive Analytics")
 
-# ---------------- DATA LOADING ----------------
+#DATA LOADING
 DATA_PATH = "data/processed_kpi.csv"
 df = preprocess_dataset(DATA_PATH)
 
-# ---------------- MODEL ----------------
+#MODEL
 if not os.path.exists("delivery_time_model.pkl") or not os.path.exists("scaler.pkl"):
     with st.spinner("Training AI model..."):
         model, scaler = train_delivery_model(df)
@@ -34,7 +34,7 @@ else:
     model = joblib.load("delivery_time_model.pkl")
     scaler = joblib.load("scaler.pkl")
 
-# ---------------- KPI METRICS ----------------
+#KPI METRICS
 kpis = compute_kpis(df)
 
 st.subheader("📊 Business Performance Metrics")
@@ -49,9 +49,9 @@ with col3:
 with col4:
     st.markdown(f"<div class='metric-card'><h2>Total Defective Units</h2><h3>{int(kpis['total_defective_units'])}</h3></div>", unsafe_allow_html=True)
 
-# ---------------- VISUALS ----------------
+#VISUALS
 st.divider()
-st.subheader("📦 Order Distribution by Category")
+st.subheader("Order Distribution by Category")
 
 # Prepare category counts safely
 if "Item_Category" in df.columns and df["Item_Category"].nunique() > 0:
@@ -60,7 +60,7 @@ if "Item_Category" in df.columns and df["Item_Category"].nunique() > 0:
 else:
     cat_counts = pd.DataFrame({"Item_Category": ["No data"], "Count": [0]})
 
-# Try Plotly for interactive charts, fallback to Matplotlib
+#Plotly for interactive charts, fallback to Matplotlib
 try:
     import plotly.express as px
 
@@ -94,11 +94,9 @@ except Exception:
 st.divider()
 st.subheader("⚙️ Efficiency vs Project Progress")
 
-# Ensure Project_Progress exists (fallback to index-based progress)
 if "Project_Progress" not in df.columns:
     df["Project_Progress"] = (df.index - df.index.min()) / max(1, (df.index.max() - df.index.min()))
 
-# Safe default columns
 color_col = "Defect_Rate" if "Defect_Rate" in df.columns else None
 size_col = "Order_Value" if "Order_Value" in df.columns else None
 hover_cols = []
@@ -140,7 +138,7 @@ except Exception:
     ax2.set_ylabel("Efficiency")
     st.pyplot(fig2)
 
-# ---------------- AI PREDICTION ----------------
+#AI PREDICTION
 st.divider()
 st.subheader("🤖 Predict Delivery Time")
 
@@ -163,8 +161,8 @@ if st.button("🚀 Predict Now"):
     st.success(f"🕒 Predicted Delivery Time: **{predicted_time:.2f} days**")
 
     if predicted_time < 5:
-        st.info("✅ Excellent! Fast delivery expected.")
+        st.info("Excellent! Fast delivery expected.")
     elif predicted_time < 10:
-        st.warning("⚠️ Moderate delivery time. Possible delay risk.")
+        st.warning("Moderate delivery time. Possible delay risk.")
     else:
-        st.error("🚨 High delay risk detected! Consider supplier optimization.")
+        st.error("High delay risk detected! Consider supplier optimization.")
